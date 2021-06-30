@@ -141,16 +141,16 @@ def find_next_page(driver):
 
 def get_and_write_text(name):
     try:
-        tbl = driver.find_element_by_xpath(
+        result_table = driver.find_element_by_xpath(
             '/html/body/div[3]/main/section/div/div/div[3]/div/div/div[2]').get_attribute('outerHTML')
-        df = pd.concat(pd.read_html(tbl))
+        dataframe = pd.concat(pd.read_html(result_table))
         # Попытается дозаписать данные в файл, если он существует. Если файла нет - создаст его
         try:
             writer = pd.ExcelWriter(dirpath_save+name+'.xlsx', engine="openpyxl", mode='a')
-            df.to_excel(writer, sheet_name='Page')
+            dataframe.to_excel(writer, sheet_name='Page')
             writer.save()
         except IOError:
-            df.to_excel(dirpath_save+name+'.xlsx')
+            dataframe.to_excel(dirpath_save+name+'.xlsx')
         return 'Table exist'
     except:
         return None

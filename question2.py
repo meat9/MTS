@@ -39,15 +39,15 @@ def search_name(personal_name):
 
 def get_and_write_text(name):
     try:
-        tbl = driver.find_element_by_xpath('//*[@id="resultTable"]').get_attribute('outerHTML')
-        df = pd.concat(pd.read_html(tbl))
+        result_table = driver.find_element_by_xpath('//*[@id="resultTable"]').get_attribute('outerHTML')
+        dataframe = pd.concat(pd.read_html(result_table))
         # Попытается дозаписать данные в файл, если он существует. Если файла нет - создаст его
         try:
             writer = pd.ExcelWriter(dirpath_save+name+'.xlsx', engine="openpyxl", mode='a')
-            df.to_excel(writer, sheet_name='Page')
+            dataframe.to_excel(writer, sheet_name='Page')
             writer.save()
         except IOError:
-            df.to_excel(dirpath_save+name+'.xlsx')
+            dataframe.to_excel(dirpath_save+name+'.xlsx')
         return 'Table exist'
     except:
         print('error write file')
