@@ -6,13 +6,6 @@ from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
 
-driver = webdriver.Firefox()
-executor_url = driver.command_executor._url
-site = "https://sudrf.ru/index.php?id=300#sp"
-driver.get(site)
-time.sleep(3)
-
-
 # Функция вставляет ФИО в поле поиска и выбирает Москву
 
 
@@ -59,12 +52,17 @@ def main(name):
     time.sleep(5)
     get_and_write_text(name)  # Вытаскиваем текст и сохраняем его в таблицу
     time.sleep(5)
-    print('save done')
+    print('Обработка данных завершена')
 
 
 if __name__ == "__main__":
-    dirpath_read = r'D:\WORK\MTS\\'
-    dirpath_save = r'D:\WORK\MTS\output2\\'
+    dirpath_read = r'D:\WORK\MTS\\'  # Путь для файла с входящими данными
+    dirpath_save = r'D:\WORK\MTS\output2\\'  # Путь для файлов, где будут храниться результаты программы
+    driver = webdriver.Firefox()  # Настройки селениума
+    executor_url = driver.command_executor._url
+    site = "https://sudrf.ru/index.php?id=300#sp"
+    driver.get(site)  # Запуск селениума
+    time.sleep(3)
     try:
         Excel = win32.Dispatch("Excel.Application")
         wb = Excel.Workbooks.Open(dirpath_read+'input_data.xlsx')
@@ -75,6 +73,7 @@ if __name__ == "__main__":
             main(name)
         wb.Close()
         Excel.Quit()
+        print('Обработка всех данных завершена')
 
     except Exception as e:
         print(e)

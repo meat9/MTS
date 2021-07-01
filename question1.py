@@ -10,13 +10,6 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
 
-pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-driver = webdriver.Firefox()
-executor_url = driver.command_executor._url
-site = "https://fssp.gov.ru"
-driver.get(site)
-time.sleep(3)
-
 # Функция проверяет наличие капчи на странице
 
 
@@ -70,7 +63,6 @@ def crack_captcha():
         except:
             error_find = "Done"
         return error_find
-    print(txt)
     time.sleep(5)
     captcha_form = driver.find_element_by_id('captcha-popup-code')
     captcha_form.send_keys(txt)
@@ -136,7 +128,8 @@ def find_next_page(driver):
     except:
         return None
 
-# Функция находит табличную часть (результаты поиска) на странице и сохраняет ее в файл
+# Функция находит табличную часть (результаты поиска)
+# на странице и сохраняет ее в файл
 
 
 def get_and_write_text(name):
@@ -168,12 +161,20 @@ def main(name):
         get_and_write_text(name)
         time.sleep(5)
         next_page = find_next_page(driver)
-    print('save done')
+    print('Обработка данных завершена')
 
 
 if __name__ == "__main__":
+    # Настройки запуска скрипта
     dirpath_read = r'D:\WORK\MTS\\'  # Путь для файла с входящими данными
     dirpath_save = r'D:\WORK\MTS\output\\'  # Путь для файлов, где будут храниться результаты программы
+    # Путь до расположения программы tesseract (то, что распознает текст на капче)
+    pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    driver = webdriver.Firefox()  # Настройки селениума
+    executor_url = driver.command_executor._url
+    site = "https://fssp.gov.ru"
+    driver.get(site)  # Запуск селениума
+    time.sleep(3)
     try:
         Excel = win32.Dispatch("Excel.Application")
         wb = Excel.Workbooks.Open(dirpath_read+'input_data.xlsx')
@@ -190,6 +191,7 @@ if __name__ == "__main__":
             main(name)
         wb.Close()
         Excel.Quit()
+        print('Обработка всех данных завершена')
 
     except Exception as e:
         print(e)
